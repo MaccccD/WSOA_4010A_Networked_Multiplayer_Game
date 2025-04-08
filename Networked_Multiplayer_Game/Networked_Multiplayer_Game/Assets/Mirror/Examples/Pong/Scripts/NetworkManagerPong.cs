@@ -11,7 +11,7 @@ namespace Mirror.Examples.Pong
     // spawning players. The built in RoundRobin spawn method wouldn't work after
     // someone reconnects (both players would be on the same side).
     [AddComponentMenu("")]
-    public class NetworkManagerPong : NetworkManager
+    public class NetworkManagerPong : NetworkManager //base network manager class
     {
         public Transform leftRacketSpawn;
         public Transform rightRacketSpawn;
@@ -20,9 +20,9 @@ namespace Mirror.Examples.Pong
         public override void OnServerAddPlayer(NetworkConnectionToClient conn)
         {
             // add player at correct spawn position
-            Transform start = numPlayers == 0 ? leftRacketSpawn : rightRacketSpawn;
-            GameObject player = Instantiate(playerPrefab, start.position, start.rotation);
-            NetworkServer.AddPlayerForConnection(conn, player);
+            Transform start = numPlayers == 0 ? leftRacketSpawn : rightRacketSpawn; //if no. of player = 0 the first player will get the left side, if it is bigger than 1 then player will spawn on the right side
+            GameObject player = Instantiate(playerPrefab, start.position, start.rotation); //prefab instantiated at the start position, i.e, the racket
+            NetworkServer.AddPlayerForConnection(conn, player); //"NetworkServer" 
 
             // spawn ball if two players
             if (numPlayers == 2)
@@ -32,7 +32,7 @@ namespace Mirror.Examples.Pong
             }
         }
 
-        public override void OnServerDisconnect(NetworkConnectionToClient conn)
+        public override void OnServerDisconnect(NetworkConnectionToClient conn) //if a player disconnects and the ball is still in play, the ball gets destroyed and the game stops
         {
             // destroy ball
             if (ball != null)
